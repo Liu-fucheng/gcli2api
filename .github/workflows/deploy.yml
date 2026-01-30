@@ -38,7 +38,6 @@ jobs:
             docker run -d \
               --name gcli2api \
               --restart always \
-              -p 8000:8000 \
               ghcr.io/$REPO_LOWER:latest
 
             # 5. 清理垃圾
