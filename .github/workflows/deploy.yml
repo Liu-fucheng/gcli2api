@@ -43,6 +43,7 @@ jobs:
               --name gcli2api \
               --restart always \
               --network host \
+              -e PASSWORD="" \
               -e API_PASSWORD=${{ secrets.API_PWD }} \
               -e PANEL_PASSWORD=${{ secrets.PANEL_PWD }} \
               -e PORT=7861 \
