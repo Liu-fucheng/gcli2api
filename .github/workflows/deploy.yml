@@ -38,17 +38,15 @@ jobs:
             docker rm gcli2api || true
             
             # 5. 启动容器 (完美复刻你的命令配置)
-            # 使用 host 模式，无需 -p 7861:7861
             docker run -d \
               --name gcli2api \
               --restart always \
-              --network host \
               -e PASSWORD="" \
               -e API_PASSWORD=${{ secrets.API_PWD }} \
               -e PANEL_PASSWORD=${{ secrets.PANEL_PWD }} \
-              -e PORT=7861 \
               -e TZ=Asia/Shanghai \
               -v /root/gcli2api/data/creds:/app/creds \
+              -p 7861:7861
               ghcr.io/$REPO_LOWER:latest
 
             # 6. 清理
