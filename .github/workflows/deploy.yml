@@ -46,7 +46,7 @@ jobs:
               -e PANEL_PASSWORD=${{ secrets.PANEL_PWD }} \
               -e TZ=Asia/Shanghai \
               -v /root/gcli2api/data/creds:/app/creds \
-              -p 7861:7861
+              -p 7861:7861 \
               ghcr.io/$REPO_LOWER:latest
 
             # 6. 清理
