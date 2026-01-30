@@ -20,20 +20,26 @@ jobs:
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           port: 2222
           script: |
-            # 登录 GHCR
+            # 1. 将 GitHub 仓库名 (Liu-fucheng/...) 转换为全小写
+            # 这一步非常关键，否则 Docker 会报错
+            REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+
+            # 2. 登录 GHCR
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # 拉取你自己 Fork 仓库构建的镜像
-            docker pull ghcr.io/${{ github.repository }}:latest
+            # 3. 拉取镜像 (使用转换后的小写变量 $REPO_LOWER)
+            docker pull ghcr.io/$REPO_LOWER:latest
 
-            # 重启容器 (根据你的实际运行命令修改参数)
+            # 4. 重启容器
             docker stop gcli2api || true
             docker rm gcli2api || true
+            
+            # 启动新容器
             docker run -d \
               --name gcli2api \
               --restart always \
               -p 8000:8000 \
-              ghcr.io/${{ github.repository }}:latest
+              ghcr.io/$REPO_LOWER:latest
 
-            # 清理旧镜像
+            # 5. 清理垃圾
             docker image prune -f
