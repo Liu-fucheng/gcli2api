@@ -1,4 +1,4 @@
-full_hash=2f58c1e8818716e455afcb9231cf270c737d9d25
-short_hash=2f58c1e
-message=Merge branch 'su-kaka:master' into master
-date=2026-01-30 13:45:52 +0800
+full_hash=6113761a5aadd6788823e8f41f2e3a21502cdb31
+short_hash=6113761
+message=Update deploy.yml
+date=2026-01-30 13:51:58 +0800
