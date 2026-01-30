@@ -1,4 +1,4 @@
-full_hash=6113761a5aadd6788823e8f41f2e3a21502cdb31
-short_hash=6113761
+full_hash=45788a707d37b78b8e33ae86f31b0fd897cb2070
+short_hash=45788a7
 message=Update deploy.yml
-date=2026-01-30 13:51:58 +0800
+date=2026-01-30 13:57:32 +0800
