@@ -1,0 +1,41 @@
+name: Deploy to VPS
+
+on:
+  workflow_run:
+    workflows: ["Docker Build and Publish"] # 这里必须和 docker-publish.yml 里的 name 一模一样
+    types:
+      - completed
+
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # 只有构建成功才部署
+    
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          script: |
+            # 登录 GHCR (使用你的 Fork 仓库的凭证)
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # 1. 拉取镜像 (注意：这里拉取的是你 Fork 仓库构建出的镜像)
+            # github.repository 会自动替换为 "你的用户名/gcli2api"
+            docker pull ghcr.io/${{ github.repository }}:latest
+
+            # 2. 重启容器
+            docker stop gcli2api || true
+            docker rm gcli2api || true
+
+            # 3. 启动新容器 (请根据实际情况修改端口映射)
+            docker run -d \
+              --name gcli2api \
+              --restart always \
+              -p 8000:8000 \
+              ghcr.io/${{ github.repository }}:latest
+
+            # 4. 清理垃圾
+            docker image prune -f
